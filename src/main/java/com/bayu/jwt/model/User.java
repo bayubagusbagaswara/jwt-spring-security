@@ -1,5 +1,6 @@
 package com.bayu.jwt.model;
 
+import com.bayu.jwt.model.audit.DateAudit;
 import lombok.*;
 import org.hibernate.annotations.NaturalId;
 
@@ -19,7 +20,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User extends DateAudit {
 
     @Id
     @Column(name = "id")
@@ -62,6 +63,17 @@ public class User {
     @Column(name = "is_email_verified", nullable = false)
     private Boolean isEmailVerified;
 
+    public User(User user) {
+        id = user.getId();
+        username = user.getUsername();
+        password = user.getPassword();
+        firstName = user.getFirstName();
+        lastName = user.getLastName();
+        email = user.getEmail();
+        active = user.getActive();
+        roles = user.getRoles();
+        isEmailVerified = user.getEmailVerified();
+    }
 
     public void addRole(Role role) {
         roles.add(role);
