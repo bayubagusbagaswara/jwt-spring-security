@@ -1,5 +1,6 @@
 package com.bayu.jwt.service.impl;
 
+import com.bayu.jwt.exception.TokenRefreshException;
 import com.bayu.jwt.model.User;
 import com.bayu.jwt.model.UserDevice;
 import com.bayu.jwt.model.token.RefreshToken;
@@ -43,6 +44,12 @@ public class UserDeviceServiceImpl implements UserDeviceService {
 
     @Override
     public void verifyRefreshAvailability(RefreshToken refreshToken) {
+        UserDevice userDevice = findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new TokenRefreshException(refreshToken.getToken(), "No device found for the matching token. Please login again"));
 
+        if (!userDevice.getIsRefreshToken()) {
+            throw new TokenRefreshException(refreshToken.getToken(), "Refresh blocked for the device. Please login through a different device");
+        }
     }
+
 }
