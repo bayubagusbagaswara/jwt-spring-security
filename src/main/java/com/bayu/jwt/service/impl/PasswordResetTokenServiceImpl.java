@@ -6,10 +6,12 @@ import com.bayu.jwt.model.User;
 import com.bayu.jwt.payload.PasswordResetRequest;
 import com.bayu.jwt.repository.PasswordResetTokenRepository;
 import com.bayu.jwt.service.PasswordResetTokenService;
+import com.bayu.jwt.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Optional;
 
 @Service
@@ -38,6 +40,7 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
 
     @Override
     public Optional<PasswordResetToken> createToken(User user) {
+
         return Optional.empty();
     }
 
@@ -55,4 +58,17 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
     public void matchEmail(PasswordResetToken token, String requestEmail) {
 
     }
+
+    @Override
+    public PasswordResetToken createTokenWithUser(User user) {
+        String tokenID = Util.generateRandomUuid();
+        PasswordResetToken token = new PasswordResetToken();
+        token.setToken(tokenID);
+        token.setExpiryDate(Instant.now().plusMillis(expiration));
+        token.setClaimed(false);
+        token.setActive(true);
+        token.setUser(user);
+        return token;
+    }
+
 }
