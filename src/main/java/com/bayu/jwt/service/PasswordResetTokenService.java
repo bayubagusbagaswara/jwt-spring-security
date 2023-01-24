@@ -18,4 +18,6 @@ public interface PasswordResetTokenService {
 
     public void matchEmail(PasswordResetToken token, String requestEmail);
 
+    public PasswordResetToken createTokenWithUser(User user);
+
 }
