@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -76,7 +77,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<Role> getRolesForNewUser(Boolean isToBeMadeAdmin) {
-        return null;
+        Set<Role> newUserRoles = new HashSet<>(roleService.findAll());
+        if (!isToBeMadeAdmin) {
+            newUserRoles.removeIf(Role::isAdminRole);
+        }
+        logger.info("Setting user roles: " + newUserRoles);
+        return newUserRoles;
     }
 
     @Override
