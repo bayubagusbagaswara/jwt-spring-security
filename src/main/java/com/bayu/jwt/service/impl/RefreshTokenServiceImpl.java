@@ -49,11 +49,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public void deleteById(Long id) {
-
+        refreshTokenRepository.deleteById(id);
     }
 
     @Override
     public void increaseCount(RefreshToken refreshToken) {
-
+        refreshToken.incrementRefreshCount();
+        save(refreshToken);
     }
 }
