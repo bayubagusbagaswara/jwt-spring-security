@@ -57,7 +57,7 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
 
     @Override
     public EmailVerificationToken save(EmailVerificationToken emailVerificationToken) {
-        return null;
+        return emailVerificationTokenRepository.save(emailVerificationToken);
     }
 
     @Override
