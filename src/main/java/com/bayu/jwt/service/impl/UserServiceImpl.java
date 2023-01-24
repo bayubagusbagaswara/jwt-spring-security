@@ -1,8 +1,10 @@
 package com.bayu.jwt.service.impl;
 
+import com.bayu.jwt.exception.UserLogoutException;
 import com.bayu.jwt.model.CustomUserDetails;
 import com.bayu.jwt.model.Role;
 import com.bayu.jwt.model.User;
+import com.bayu.jwt.model.UserDevice;
 import com.bayu.jwt.payload.LogoutRequest;
 import com.bayu.jwt.payload.RegistrationRequest;
 import com.bayu.jwt.repository.UserRepository;
@@ -10,6 +12,7 @@ import com.bayu.jwt.service.RefreshTokenService;
 import com.bayu.jwt.service.RoleService;
 import com.bayu.jwt.service.UserDeviceService;
 import com.bayu.jwt.service.UserService;
+import com.bayu.jwt.validation.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +89,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void logoutUser(CustomUserDetails currentUser, LogoutRequest logoutRequest) {
+    public void logoutUser(@CurrentUser CustomUserDetails currentUser, LogoutRequest logoutRequest) {
+        String deviceId = logoutRequest.getDeviceInfo().getDeviceId();
+        UserDevice userDevice = userDeviceService
+                .findDeviceByUserId(currentUser.getId(), deviceId)
+                .filter(device -> device.getDeviceId().equals(deviceId))
+                .orElseThrow(() -> new UserLogoutException(logoutRequest.getDeviceInfo().getDeviceId(), "Invalid device Id supplied. No matching device found for the given user "));
 
+        logger.info("Removing refresh token associated with device [" + userDevice + "]");
+        refreshTokenService.deleteById(userDevice.getRefreshToken().getId());
     }
+
 }
