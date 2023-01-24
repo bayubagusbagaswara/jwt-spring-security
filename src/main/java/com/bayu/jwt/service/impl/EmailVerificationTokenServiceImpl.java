@@ -1,5 +1,6 @@
 package com.bayu.jwt.service.impl;
 
+import com.bayu.jwt.exception.InvalidTokenRequestException;
 import com.bayu.jwt.model.TokenStatus;
 import com.bayu.jwt.model.User;
 import com.bayu.jwt.model.token.EmailVerificationToken;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.IllegalFormatCodePointException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class EmailVerificationTokenServiceImpl implements EmailVerificationTokenService {
@@ -62,11 +65,13 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
 
     @Override
     public String generateNewToken() {
-        return null;
+        return UUID.randomUUID().toString();
     }
 
     @Override
     public void verifyExpiration(EmailVerificationToken token) {
-
+        if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
+            throw new InvalidTokenRequestException("Email Verification Token", token.getToken(), "Expired token. Please issue a new request");
+        }
     }
 }
