@@ -1,5 +1,6 @@
 package com.bayu.jwt.service.impl;
 
+import com.bayu.jwt.model.User;
 import com.bayu.jwt.model.UserDevice;
 import com.bayu.jwt.model.token.RefreshToken;
 import com.bayu.jwt.payload.DeviceInfo;
@@ -32,7 +33,12 @@ public class UserDeviceServiceImpl implements UserDeviceService {
 
     @Override
     public UserDevice createUserDevice(DeviceInfo deviceInfo) {
-        return null;
+        UserDevice userDevice = new UserDevice();
+        userDevice.setDeviceId(deviceInfo.getDeviceId());
+        userDevice.setDeviceType(deviceInfo.getDeviceType());
+        userDevice.setNotificationToken(deviceInfo.getNotificationToken());
+        userDevice.setIsRefreshToken(true);
+        return userDevice;
     }
 
     @Override
