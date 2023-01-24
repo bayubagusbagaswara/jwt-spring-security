@@ -25,7 +25,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshToken save(RefreshToken refreshToken) {
-        return null;
+        return refreshTokenRepository.save(refreshToken);
     }
 
     @Override
