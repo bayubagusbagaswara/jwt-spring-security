@@ -62,7 +62,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(RegistrationRequest registrationRequest) {
-        return null;
+        User newUser = new User();
+        Boolean isNewUserAsAdmin = registrationRequest.getRegisterAsAdmin();
+        newUser.setEmail(registrationRequest.getEmail());
+        newUser.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
+        newUser.setUsername(registrationRequest.getUsername());
+        newUser.addRoles(getRolesForNewUser(isNewUserAsAdmin));
+        newUser.setActive(true);
+        newUser.setEmailVerified(false);
+
+        return newUser;
     }
 
     @Override
