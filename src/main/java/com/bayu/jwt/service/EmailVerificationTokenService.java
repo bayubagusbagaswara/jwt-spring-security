@@ -1,10 +1,13 @@
 package com.bayu.jwt.service;
 
+import com.bayu.jwt.model.User;
 import com.bayu.jwt.model.token.EmailVerificationToken;
 
 import java.util.Optional;
 
 public interface EmailVerificationTokenService {
+
+    void createVerificationToken(User user, String token);
 
     public EmailVerificationToken updateExistingTokenWithNameAndExpiry(EmailVerificationToken existingToken);
 
