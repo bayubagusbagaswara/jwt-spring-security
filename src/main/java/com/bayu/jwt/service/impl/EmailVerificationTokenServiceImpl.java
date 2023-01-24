@@ -44,7 +44,10 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
 
     @Override
     public EmailVerificationToken updateExistingTokenWithNameAndExpiry(EmailVerificationToken existingToken) {
-        return null;
+        existingToken.setTokenStatus(TokenStatus.STATUS_PENDING);
+        existingToken.setExpiryDate(Instant.now().plusMillis(emailVerificationTokenExpiryDuration));
+        logger.info("Updated Email Verification Token [" + existingToken + "]");
+        return save(existingToken);
     }
 
     @Override
