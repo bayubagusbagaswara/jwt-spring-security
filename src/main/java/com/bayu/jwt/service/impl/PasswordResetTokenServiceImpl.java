@@ -41,8 +41,8 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
 
     @Override
     public Optional<PasswordResetToken> createToken(User user) {
-
-        return Optional.empty();
+        PasswordResetToken token = createTokenWithUser(user);
+        return Optional.of(passwordResetTokenRepository.save(token));
     }
 
     @Override
