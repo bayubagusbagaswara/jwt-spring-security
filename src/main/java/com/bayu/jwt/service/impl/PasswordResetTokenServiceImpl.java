@@ -8,6 +8,7 @@ import com.bayu.jwt.payload.PasswordResetRequest;
 import com.bayu.jwt.repository.PasswordResetTokenRepository;
 import com.bayu.jwt.service.PasswordResetTokenService;
 import com.bayu.jwt.util.Util;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,13 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
 
     @Override
     public PasswordResetToken claimToken(PasswordResetToken token) {
-        return null;
+        User user = token.getUser();
+        token.setClaimed(true);
+
+        CollectionUtils.emptyIfNull(passwordResetTokenRepository.findActiveTokensForUser(user))
+                .forEach(t -> t.setActive(false));
+
+        return token;
     }
 
     @Override
