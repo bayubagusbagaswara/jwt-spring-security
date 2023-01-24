@@ -1,5 +1,6 @@
 package com.bayu.jwt.service.impl;
 
+import com.bayu.jwt.exception.InvalidTokenRequestException;
 import com.bayu.jwt.exception.ResourceNotFoundException;
 import com.bayu.jwt.model.PasswordResetToken;
 import com.bayu.jwt.model.User;
@@ -56,7 +57,10 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
 
     @Override
     public void matchEmail(PasswordResetToken token, String requestEmail) {
-
+        if (token.getUser().getEmail().compareToIgnoreCase(requestEmail) != 0) {
+            throw new InvalidTokenRequestException("Password Reset Token", token.getToken(),
+                    "Token is invalid for the given user " + requestEmail);
+        }
     }
 
     @Override
