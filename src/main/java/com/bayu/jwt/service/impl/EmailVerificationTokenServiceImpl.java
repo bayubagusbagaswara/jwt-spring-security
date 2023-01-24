@@ -52,7 +52,7 @@ public class EmailVerificationTokenServiceImpl implements EmailVerificationToken
 
     @Override
     public Optional<EmailVerificationToken> findByToken(String token) {
-        return Optional.empty();
+        return emailVerificationTokenRepository.findByToken(token);
     }
 
     @Override
