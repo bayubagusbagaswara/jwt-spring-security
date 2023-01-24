@@ -27,7 +27,7 @@ public class UserDeviceServiceImpl implements UserDeviceService {
 
     @Override
     public Optional<UserDevice> findByRefreshToken(RefreshToken refreshToken) {
-        return Optional.empty();
+        return userDeviceRepository.findByRefreshToken(refreshToken);
     }
 
     @Override
