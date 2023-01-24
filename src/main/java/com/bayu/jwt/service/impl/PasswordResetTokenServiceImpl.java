@@ -59,6 +59,15 @@ public class PasswordResetTokenServiceImpl implements PasswordResetTokenService 
 
     @Override
     public void verifyExpiration(PasswordResetToken token) {
+        if (token.getExpiryDate().compareTo(Instant.now()) < 0) {
+            throw new InvalidTokenRequestException("Password Reset Token", token.getToken(),
+                    "Expired token. Please issue a new request");
+        }
+
+        // cek token active atau inactive
+        if (!token.getActive()) {
+            throw new InvalidTokenRequestException("Password Reset Token", token.getToken(), "Token was marked inactive");
+        }
 
     }
 
